@@ -1,13 +1,20 @@
+# Base image
 FROM node:lts-buster
-  
-WORKDIR /usr/src/app
 
+# Set working directory
+WORKDIR /app
+
+# Copy only package.json first for better caching
 COPY package.json .
 
-RUN npm install && npm install -g qrcode-terminal pm2
+# Install dependencies
+RUN npm install --omit=dev && npm install -g pm2
 
+# Now copy all other files
 COPY . .
 
-EXPOSE 5000
+# Expose necessary ports
+EXPOSE 9090
 
-CMD ["npm", "start"]
+# Start the application
+CMD ["pm2-runtime", "start", "index.js", "--name", "MANU-MD"]

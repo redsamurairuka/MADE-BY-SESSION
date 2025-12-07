@@ -1,198 +1,603 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOLO-LEVELING PAIR CODE</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SOLO-LEVELING-MD Pairing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --neon-blue: #00FFEA;
+      --neon-purple: #8A2BE2;
+      --neon-red: #FF2400;
+      --dark-bg: #0a0a15;
+      --darker-bg: #050510;
+      --text-color: #e0e0ff;
+      --fixed-width: 420px;
+      --fixed-height: 600px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-image: url("https://wallpapercave.com/w/wp13381180.jpg"); /* Set the background image */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-      font-family: Arial, sans-serif;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-color);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--darker-bg);
+      overflow: hidden;
     }
 
-    .container {
+    /* Digital Matrix Background */
+    .matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      background: radial-gradient(ellipse at center, rgba(5,5,16,0.9) 0%, rgba(0,0,10,1) 100%);
+    }
+
+    .matrix-column {
+      position: absolute;
+      top: 0;
+      width: 20px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
+    }
+
+    .matrix-digit {
+      color: rgba(0, 255, 234, 0.2);
+      font-size: 18px;
+      font-family: monospace;
+      opacity: 0;
+      animation: matrixFall linear infinite;
+    }
+
+    @keyframes matrixFall {
+      0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.8;
+      }
+      80% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    /* Circuit Board Effect */
+    .circuit-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    .circuit-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+      height: 1px;
+      animation: circuitPulse 8s infinite;
+    }
+
+    .circuit-node {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--neon-blue);
+      box-shadow: 0 0 10px var(--neon-blue);
+      animation: nodePulse 3s infinite;
+    }
+
+    @keyframes circuitPulse {
+      0%, 100% { opacity: 0.1; }
+      50% { opacity: 0.3; }
+    }
+
+    @keyframes nodePulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      max-width: var(--fixed-width);
+      max-height: var(--fixed-height);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      padding: 20px;
+      margin: auto;
+      position: relative;
     }
 
     .box {
-      width: 300px;
-      height: 330px;
-      padding: 20px;
+      width: 100%;
+      height: 100%;
+      padding: 30px 25px;
+      background: rgba(10, 10, 21, 0.8);
+      border-radius: 20px;
+      box-shadow: 0 0 30px var(--neon-blue);
+      border: 2px solid var(--neon-blue);
+      backdrop-filter: blur(8px);
       position: relative;
       text-align: center;
-      background-color: rgba(255,255,255,0.5);
-      border-radius: 10px;
-      transform: perspective(1000px) rotateY(0deg);
-      box-shadow: none; /* Removed box shadow */
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 15px rgba(0, 255, 234, 0.5);
+      letter-spacing: 3px;
+      font-weight: 900;
       position: relative;
+      flex-shrink: 0;
     }
 
-    #text {
-      color: #000; /* Set the text color to black (#000) */
+    .logo::after {
+      content: 'VIP EDITION';
+      position: absolute;
+      top: -10px;
+      right: -25px;
+      font-size: 0.8rem;
+      background: linear-gradient(45deg, var(--neon-red), var(--neon-purple));
+      padding: 2px 10px;
+      border-radius: 15px;
+      color: white;
+      transform: rotate(15deg);
+      box-shadow: 0 0 10px var(--neon-purple);
     }
 
-    .input-container input {
-      color: #000; /* Set the text color to black (#000) */
-    }
-
-    .centered-text {
-      color: #000; /* Set the text color to black (#000) */
+    .tagline {
+      color: var(--neon-blue);
+      font-size: 1rem;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(0, 255, 234, 0.3);
+      flex-shrink: 0;
     }
 
     .input-container {
       display: flex;
-      background: white;
-      border-radius: 1rem;
-      background: linear-gradient(45deg, #c5c5c5 0%, #ffffff 100%);
-      padding: 0.3rem;
-      gap: 0.3rem;
-      max-width: 300px; /* Set your desired maximum width */
-      width: 100%;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: rgba(20, 20, 40, 0.8);
+      border-radius: 15px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      margin: 20px 0;
+      flex-shrink: 0;
     }
 
-    .input-container input {
-      border-radius: 0.8rem 0 0 0.8rem;
-      background: #e8e8e8;
-      width: 89%;
-      flex-basis: 75%;
-      padding: 1rem;
+    .input-container:focus-within {
+      border-color: var(--neon-purple);
+      box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
+    }
+
+    .input-container input,
+    .input-container button {
+      flex: 1 1 100%;
+      padding: 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      border-radius: 10px;
       border: none;
-      border-left: 2px solid #ff9d9d;
-      color: #5e5e5e;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .input-container input:focus {
-      border-left: 2px solid #ff9d9d;
       outline: none;
     }
 
-    .input-container button {
-      flex-basis: 25%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #8a2be2 0%, #800080 100%); /* Purple background */
-      font-weight: 900;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
+    .input-container input {
+      background: rgba(30, 30, 50, 0.9);
       color: white;
-      border: none;
-      width: 100%;
-      border-radius: 0 1rem 1rem 0;
-      transition: all 0.2s ease-in-out;
+      text-align: center;
+    }
+
+    .input-container input::placeholder {
+      color: #aaa;
+    }
+
+    .input-container button {
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      color: black;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 255, 234, 0.5);
     }
 
     .input-container button:hover {
-      background: linear-gradient(135deg, #A8E4A0 0%, #32CD32 100%);
-      color: red; /* Change text color on hover to red */
+      transform: translateY(-3px);
+      box-shadow: 0 5px 25px rgba(0, 255, 234, 0.8);
+      background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
     }
 
-    @media (max-width: 500px) {
-      .input-container {
-        flex-direction: column;
-      }
+    .result-container {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      border: 1px solid var(--neon-blue);
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 20px rgba(0, 255, 234, 0.2);
+      flex-grow: 1;
+      overflow: auto;
+    }
 
-      .input-container input {
-        border-radius: 0.8rem;
-      }
+    #copy {
+      background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 8px 15px;
+      border-radius: 8px;
+      letter-spacing: 2px;
+      position: relative;
+    }
 
-      .input-container button {
-        padding: 1rem;
-        border-radius: 0.8rem;
+    #copy:hover {
+      text-shadow: 0 0 20px rgba(0, 255, 234, 0.8);
+    }
+
+    .security-badge {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--neon-blue);
+      flex-shrink: 0;
+    }
+
+    .loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 20;
+    }
+
+    .loading div {
+      border: 4px solid var(--neon-blue);
+      border-top: 4px solid var(--neon-purple);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* For very small screens */
+    @media (max-height: 600px) {
+      .container {
+        max-height: 100vh;
+        padding: 10px;
+      }
+      .box {
+        padding: 20px 15px;
+      }
+      .logo {
+        font-size: 1.8rem;
+      }
+      .result-container {
+        min-height: 80px;
+        padding: 15px;
       }
     }
 
-    .centered-text {
-      text-align: center;
+    /* For very narrow screens */
+    @media (max-width: 400px) {
+      .container {
+        max-width: 100vw;
+        padding: 10px;
+      }
+      .box {
+        padding: 20px 15px;
+      }
+      .logo {
+        font-size: 1.6rem;
+      }
+      .logo::after {
+        top: -15px;
+        right: -15px;
+        font-size: 0.7rem;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- Digital Background Elements -->
+  <div class="matrix-bg" id="matrixBg"></div>
+  <div class="circuit-lines" id="circuitLines"></div>
+
+  <div class="loading">
+    <div></div>
+  </div>
+
   <div class="container">
-    <div class="main">
-      <div class="box" id="box">
-        <div id="text">
-          <i class="fa fa-user"></i>
-          <p>
-            <h3 class="centered-text">Link with phone number</h3>
-            <br>
-            <h6>⚙Enter your number with country code.⚙</h6>
-            <div class="input-container">
-              <input placeholder="+94789123880" type="number" id="number" placeholder="⚙enter your phone number with country code⚙" name="">
-              <button id="submit">enter</button>
-            </div>
-           
-            <a id="waiting-message" class="centered-text" style="display: none;">in process...</a>
-            <br>
-            <br>
-            <main id="pair"></main>
-          </p>
-        </div>
+    <div class="box">
+      <div class="logo">SOLO-LEVELING-MD</div>
+      <div class="tagline">WHATSAPP BOT PAIRING SYSTEM</div>
+
+      <div class="input-container">
+        <input type="number" id="number" placeholder="Enter WhatsApp Number with Country Code">
+        <button id="submit"><i class="fas fa-lock-open"></i> PAIR</button>
+      </div>
+
+      <div class="result-container">
+        <main id="pair"></main>
+      </div>
+
+      <div class="security-badge">
+        <i class="fas fa-shield-alt"></i> SECURE CONNECTION
       </div>
     </div>
   </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
   <script>
-    let a = document.getElementById("pair");
-    let b = document.getElementById("submit");
-    let c = document.getElementById("number");
-    let box = document.getElementById("box");
-
-    async function Copy() {
-      let text = document.getElementById("copy").innerText;
-      let obj = document.getElementById("copy");
-      await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
-      obj.innerText = "COPIED";
-      obj.style = "color:blue;font-weight:bold";
-      obj.size = "5";
-      setTimeout(() => {
-        obj.innerText = text;
-        obj.style = "color:black;font-weight-bold";
-        obj.size = "5";
-      }, 500);
+    // Create Matrix Background
+    function createMatrixBackground() {
+      const matrixBg = document.getElementById('matrixBg');
+      const columns = Math.floor(window.innerWidth / 20);
+      
+      for (let i = 0; i < columns; i++) {
+        const column = document.createElement('div');
+        column.className = 'matrix-column';
+        column.style.left = `${i * 20}px`;
+        
+        // Random delay for each column
+        column.style.animationDelay = `${Math.random() * 5}s`;
+        
+        // Create digits in each column
+        const digitCount = 30;
+        for (let j = 0; j < digitCount; j++) {
+          const digit = document.createElement('div');
+          digit.className = 'matrix-digit';
+          digit.textContent = Math.floor(Math.random() * 2);
+          
+          // Random animation duration and delay for each digit
+          const duration = 5 + Math.random() * 10;
+          const delay = Math.random() * 5;
+          digit.style.animationDuration = `${duration}s`;
+          digit.style.animationDelay = `${delay}s`;
+          
+          column.appendChild(digit);
+        }
+        
+        matrixBg.appendChild(column);
+      }
     }
 
-    b.addEventListener("click", async (e) => {
+    // Create Circuit Board Lines
+    function createCircuitLines() {
+      const circuitLines = document.getElementById('circuitLines');
+      const lineCount = 15;
+      const nodeCount = 20;
+      
+      // Create horizontal and vertical lines
+      for (let i = 0; i < lineCount; i++) {
+        const line = document.createElement('div');
+        line.className = 'circuit-line';
+        
+        if (Math.random() > 0.5) {
+          // Horizontal line
+          line.style.width = `${Math.random() * 50 + 30}%`;
+          line.style.height = '1px';
+          line.style.left = `${Math.random() * 50}%`;
+          line.style.top = `${Math.random() * 100}%`;
+        } else {
+          // Vertical line
+          line.style.width = '1px';
+          line.style.height = `${Math.random() * 50 + 30}%`;
+          line.style.left = `${Math.random() * 100}%`;
+          line.style.top = `${Math.random() * 50}%`;
+        }
+        
+        line.style.animationDelay = `${Math.random() * 8}s`;
+        circuitLines.appendChild(line);
+      }
+      
+      // Create nodes
+      for (let i = 0; i < nodeCount; i++) {
+        const node = document.createElement('div');
+        node.className = 'circuit-node';
+        node.style.left = `${Math.random() * 100}%`;
+        node.style.top = `${Math.random() * 100}%`;
+        node.style.animationDelay = `${Math.random() * 3}s`;
+        circuitLines.appendChild(node);
+      }
+    }
+
+    // Initialize background effects
+    window.addEventListener('load', function() {
+      createMatrixBackground();
+      createCircuitLines();
+    });
+
+    const pairBox = document.getElementById("pair");
+    const submitBtn = document.getElementById("submit");
+    const numberInput = document.getElementById("number");
+
+    let isSubmitting = false;
+    let isCodeDisplayed = false;
+
+    async function Copy() {
+      const codeElement = document.getElementById("code");
+      const code = codeElement ? codeElement.innerText : '';
+      
+      try {
+        await navigator.clipboard.writeText(code);
+        
+        // Visual feedback
+        codeElement.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+        codeElement.style.color = "var(--neon-blue)";
+        codeElement.style.textShadow = "0 0 10px var(--neon-blue)";
+        
+        // Revert after 2 seconds
+        setTimeout(() => {
+          codeElement.textContent = code;
+          codeElement.style.color = "var(--neon-blue)";
+          codeElement.style.textShadow = "0 0 5px var(--neon-blue)";
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+        codeElement.innerHTML = '<i class="fas fa-times"></i> COPY FAILED';
+        codeElement.style.color = "var(--neon-red)";
+      }
+    }
+
+    submitBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      if (!c.value) {
-        a.innerHTML = '<a style="color:black;font-weight:bold">❗Enter your whatsapp number with country code.</a><br><br>';
-      } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<a style="color:black;font-weight:bold">❌Invalid number format❌</a><br><br>';
+
+      if (isCodeDisplayed) {
+        alert("Please wait for 2 minutes before requesting a new code.");
+        return;
+      }
+
+      if (isSubmitting) {
+        alert("Please wait for the code before trying to request again.");
+        return;
+      }
+
+      let raw = numberInput.value.replace(/[^0-9]/g, "");
+      if (!raw) {
+        pairBox.innerHTML = '<span style="color:var(--neon-red);"><i class="fas fa-exclamation-triangle"></i> ENTER VALID WHATSAPP NUMBER</span>';
+      } else if (raw.length < 11) {
+        pairBox.innerHTML = '<span style="color:var(--neon-red);"><i class="fas fa-ban"></i> INVALID NUMBER FORMAT</span>';
       } else {
-        const bc = c.value.replace(/[^0-9]/g, "");
-        let bb = "";
-        let bbc = "";
-        const cc = bc.split('');
-        cc.map(a => {
-          bbc += a;
-          if (bbc.length == 3) {
-            bb += " " + a;
-          } else if (bbc.length == 8) {
-            bb += " " + a;
-          } else {
-            bb += a;
-          }
-        });
-        c.type = "text";
-        c.value = "+" + bb;
-        c.style = "color:black;font-size:20px";
-        a.innerHTML = '<a style="color:black;font-weight:bold">Please wait🔎 </a><br><br>';
-        let { data } = await axios(`/code?number=${bc}`);
-        let code = data.code || "Service Unavailable";
-        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:black;font-weight:bold">' + code + '</span></font><br><br><br>';
+        isSubmitting = true;
+        document.querySelector('.loading').style.display = 'flex';
+
+        try {
+          let { data } = await axios(`/code?number=${raw}`);
+          let code = data.code || "SERVICE_UNAVAILABLE";
+          
+          // Extract only the 8-letter code
+          const pairCode = code.length === 8 ? code : code.match(/[A-Z0-9]{8}/)?.[0] || code;
+          
+          pairBox.innerHTML = `
+            <div style="text-align: center; width: 100%;">
+              <div style="margin-bottom: 10px; color: var(--neon-blue);">PAIR CODE:</div>
+              <div id="code" onclick="Copy()" style="
+                font-size: 1.8rem;
+                color: var(--neon-blue);
+                cursor: pointer;
+                transition: all 0.3s;
+                padding: 5px 10px;
+                border-radius: 5px;
+                background: rgba(0,0,0,0.3);
+                font-family: monospace;
+                letter-spacing: 2px;
+                word-break: break-all;
+              ">${pairCode}</div>
+              <button id="copyb" onclick="Copy()" style="
+                width: 100%;
+                height: 40px;
+                font-size: 16px;
+                color: #000;
+                background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                margin-top: 15px;
+                transition: background 0.3s ease, transform 0.2s ease-in-out;
+                box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+              ">Copy Code</button>
+            </div>
+          `;
+          isCodeDisplayed = true;
+          setTimeout(() => {
+            isCodeDisplayed = false;
+          }, 120000);
+        } catch (err) {
+          pairBox.innerHTML = '<span style="color:var(--neon-red);"><i class="fas fa-unlink"></i> CONNECTION ERROR - TRY AGAIN</span>';
+        } finally {
+          document.querySelector('.loading').style.display = 'none';
+          isSubmitting = false;
+        }
       }
     });
+
+    // Prevent zooming on mobile devices
+    document.addEventListener('gesturestart', function(e) {
+      e.preventDefault();
+    });
+
+    // Ensure content stays within viewport
+    window.addEventListener('resize', function() {
+      document.body.style.zoom = Math.min(
+        window.innerWidth / 420,
+        window.innerHeight / 600,
+        1
+      );
+    });
+
+    // Initial scale calculation
+    window.dispatchEvent(new Event('resize'));
   </script>
 </body>
 </html>

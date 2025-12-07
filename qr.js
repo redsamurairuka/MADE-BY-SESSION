@@ -12,37 +12,36 @@ const {
     Browsers,
     jidNormalizedUser
 } = require("@whiskeysockets/baileys");
-const axios = require('axios');
-
+const { upload } = require('./mega');
 function removeFile(FilePath) {
     if (!fs.existsSync(FilePath)) return false;
     fs.rmSync(FilePath, { recursive: true, force: true });
 }
-
 router.get('/', async (req, res) => {
     const id = makeid();
-    
+ //   let num = req.query.number;
     async function GIFTED_MD_PAIR_CODE() {
         const {
             state,
             saveCreds
         } = await useMultiFileAuthState('./temp/' + id);
         try {
-            var items = ["Safari"];
-            function selectRandomItem(array) {
-                var randomIndex = Math.floor(Math.random() * array.length);
-                return array[randomIndex];
-            }
-            var randomItem = selectRandomItem(items);
+var items = ["Safari"];
+function selectRandomItem(array) {
+  var randomIndex = Math.floor(Math.random() * array.length);
+  return array[randomIndex];
+}
+var randomItem = selectRandomItem(items);
             
             let sock = makeWASocket({
-                auth: state,
-                printQRInTerminal: false,
-                logger: pino({
-                    level: "silent"
-                }),
-                browser: Browsers.macOS("Desktop"),
-            });
+                	
+				auth: state,
+				printQRInTerminal: false,
+				logger: pino({
+					level: "silent"
+				}),
+				browser: Browsers.macOS("Desktop"),
+			});
             
             sock.ev.on('creds.update', saveCreds);
             sock.ev.on("connection.update", async (s) => {
@@ -51,12 +50,11 @@ router.get('/', async (req, res) => {
                     lastDisconnect,
                     qr
                 } = s;
-                if (qr) await res.end(await QRCode.toBuffer(qr));
+              if (qr) await res.end(await QRCode.toBuffer(qr));
                 if (connection == "open") {
                     await delay(5000);
                     let data = fs.readFileSync(__dirname + `/temp/${id}/creds.json`);
                     let rf = __dirname + `/temp/${id}/creds.json`;
-                    
                     function generateRandomText() {
                         const prefix = "3EB";
                         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -67,81 +65,70 @@ router.get('/', async (req, res) => {
                         }
                         return randomText;
                     }
-                    
                     const randomText = generateRandomText();
                     try {
-                        const base64Session = Buffer.from(data.toString()).toString('base64');
-                        let md = "SOLO-LEVELING=" + base64Session;
-                        let code = await sock.sendMessage(sock.user.id, { text: md });
                         
-                        let cap = `
-🔐 *𝙳𝙾 𝙽𝙾𝚃 �𝚂𝙷𝙰𝚁𝙴 𝚃𝙷𝙸𝚂 𝙲𝙾𝙳𝙴 𝚆𝙸𝚃𝙷 �𝙽𝚈𝙾𝙽𝙴!!*
+                        
+                        const { upload } = require('./mega');
+                        const mega_url = await upload(fs.createReadStream(rf), `${sock.user.id}.json`);
+                        const string_session = mega_url.replace('https://mega.nz/file/', '');
+                        let md = "SOLO-LEVELING=" + string_session;
+                        let code = await sock.sendMessage(sock.user.id, { text: md });
+                        let desc = `「 SESSION ID CONNECTED 」
+*╭──────────────────⳹*
+*│✅ ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ ɪs ʀᴇᴀᴅʏ!*
+*│⚠️ ᴋᴇᴇᴘ ɪᴛ ᴘʀɪᴠᴀᴛᴇ ᴀɴᴅ sᴇᴄᴜʀᴇ*
+*│🔐 ᴅᴏɴ'ᴛ sʜᴀʀᴇ ɪᴛ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ*
+*│✨ ᴇxᴘʟᴏʀᴇ ᴛʜᴇ ᴄᴏᴏʟ ғᴇᴀᴛᴜʀᴇs*
+*│🤖 ᴇɴᴊᴏʏ sᴇᴀᴍʟᴇs ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ*
+*╰──────────────────⳹*
+🪀 *ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟ:*  
+*https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38*
 
-Use this code to create your own *𝚀𝚄𝙴𝙴𝙽 𝙰𝙽𝙹𝚄 𝚇𝙿𝚁𝙾* WhatsApp User Bot. 🤖
-
-📂 *WEBSITE:*  
-👉 hsoon
-
-🛠️ *To add your SESSION_ID:*  
-1. Open the \`session.js\` file in the repo.  
-2. Paste your session like this:  
-\`\`\`js
-module.exports = {
-  SESSION_ID: 'PASTE_YOUR_SESSION_ID_HERE'
+🖇️ *ɢɪᴛʜᴜʙ ʀᴇᴘᴏ:*  
+*https://github.com/*`;
+                        await sock.sendMessage(sock.user.id, {
+text: desc,
+contextInfo: {
+externalAdReply: {
+title: "SOLO-LEVELING SESSION",
+thumbnailUrl: "https://files.catbox.moe/a7aohh.jpeg",
+sourceUrl: "https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38",
+mediaType: 1,
+renderLargerThumbnail: true
+}  
 }
-\`\`\`  
-3. Save the file and run the bot. ✅
-
-⚠️ *NEVER SHARE YOUR SESSION ID WITH ANYONE!*
-`;
-                    await sock.sendMessage(sock.user.id, {
-                        text: cap,
-                        contextInfo: {
-                            externalAdReply: {
-                                title: "SOLO-LEVELING MINE",
-                                thumbnailUrl: "https://files.catbox.moe/h241uz.jpg",
-                                sourceUrl: "https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38",
-                                mediaType: 2,
-                                renderLargerThumbnail: true,
-                                showAdAttribution: true,
-                            },
-                        },
-                    }, { quoted: code });
+},
+{quoted:code })
                     } catch (e) {
-                        let ddd = await sock.sendMessage(sock.user.id, { text: e.toString() });
-                       let cap = `
-🔐 *𝙳𝙾 𝙽𝙾𝚃 𝚂𝙷𝙰𝚁𝙴 �𝚃𝙷𝙸𝚂 𝙲𝙾𝙳𝙴 𝚆𝙸𝚃𝙷 𝙰𝙽𝚈𝙾𝙽𝙴!!*
+                            let ddd = sock.sendMessage(sock.user.id, { text: e });
+                            let desc = `「 SESSION ID CONNECTED 」
+*╭──────────────────⳹*
+*│✅ ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ ɪs ʀᴇᴀᴅʏ!*
+*│⚠️ ᴋᴇᴇᴘ ɪᴛ ᴘʀɪᴠᴀᴛᴇ ᴀɴᴅ sᴇᴄᴜʀᴇ*
+*│🔐 ᴅᴏɴ'ᴛ sʜᴀʀᴇ ɪᴛ ᴡɪᴛʜ ᴀɴʏᴏɴᴇ*
+*│✨ ᴇxᴘʟᴏʀᴇ ᴛʜᴇ ᴄᴏᴏʟ ғᴇᴀᴛᴜʀᴇs*
+*│🤖 ᴇɴᴊᴏʏ sᴇᴀᴍʟᴇs ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ*
+*╰──────────────────⳹*
+🪀 *ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟ:*  
+*https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38*
 
-Use this code to create your own *𝚀𝚄𝙴𝙴𝙽 𝙰𝙽𝙹𝚄 𝚇𝙿𝚁𝙾* WhatsApp User Bot. 🤖
-
-📂 *WEBSITE:*  
-👉 soon
-
-🛠️ *To add your SESSION_ID:*  
-1. Open the \`session.js\` file in the repo.  
-2. Paste your session like this:  
-\`\`\`js
-module.exports = {
-  SESSION_ID: 'PASTE_YOUR_SESSION_ID_HERE'
+🖇️ *ɢɪᴛʜᴜʙ ʀᴇᴘᴏ:*  
+*https://github.com/*`;
+                            await sock.sendMessage(sock.user.id, {
+text: desc,
+contextInfo: {
+externalAdReply: {
+title: "SOLO-LEVELING SESSION",
+thumbnailUrl: "https://files.catbox.moe/a7aohh.jpeg",
+sourceUrl: "https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38",
+mediaType: 2,
+renderLargerThumbnail: true,
+showAdAttribution: true
+}  
 }
-\`\`\`  
-3. Save the file and run the bot. ✅
-
-⚠️ *NEVER SHARE YOUR SESSION ID WITH ANYONE!*
-`;
-                    await sock.sendMessage(sock.user.id, {
-                        text: cap,
-                        contextInfo: {
-                            externalAdReply: {
-                                title: "SOLO-LEVELING MINE",
-                                thumbnailUrl: "https://files.catbox.moe/h241uz.jpg",
-                                sourceUrl: "https://whatsapp.com/channel/0029VbAWWH9BFLgRMCXVlU38",
-                                mediaType: 2,
-                                renderLargerThumbnail: true,
-                                showAdAttribution: true,
-                            },
-                        },
-                    }, { quoted: ddd });
+},
+{quoted:ddd })
                     }
                     await delay(10);
                     await sock.ws.close();
@@ -155,7 +142,7 @@ module.exports = {
                 }
             });
         } catch (err) {
-            console.log("service restarted", err);
+            console.log("service restated");
             await removeFile('./temp/' + id);
             if (!res.headersSent) {
                 await res.send({ code: "❗ Service Unavailable" });
@@ -164,10 +151,8 @@ module.exports = {
     }
     await GIFTED_MD_PAIR_CODE();
 });
-
 setInterval(() => {
     console.log("☘️ 𝗥𝗲𝘀𝘁𝗮𝗿𝘁𝗶𝗻𝗴 𝗽𝗿𝗼𝗰𝗲𝘀𝘀...");
     process.exit();
-}, 180000);
-
+}, 180000); //30min
 module.exports = router;
