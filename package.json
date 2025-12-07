@@ -9,7 +9,7 @@
     "restart": "pm2 restart MANU-MD"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "npm:baileys-york",
+    "@whiskeysockets/baileys": "npm:wileys",
     "jimp": "^0.16.1",
     "@adiwajshing/keyed-db": "^0.2.4",
     "qrcode": "^1.5.4",
